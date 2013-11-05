@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js" type="text/javascript"></script>
+    <script src="library/verbList.js"></script>
+    <script src="library/jquery.js"></script>
+    <script src="library/underscore.js"></script>
+    <link rel="stylesheet" href="library/style.css">
+    <script src="library/Chart.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+    <title>GTD</title>
+    <div id='weeklyReview' style="display: none">Weekly Review Checklist<br>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Collect all surrounding items, and put away</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">collect all loose papers and materials into inbox</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Get in to zero: process all into system
+      </label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">empty my head: put all my thoughts into writing, capture it all into system</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Review action lists: mark off completed, review for reminders to record all current next actions.
+      </label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Review Previous Calender data: triggers or any info that needs to be moved to current active projects.
+      </label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Review Upcoming calender: long and short term, capture action triggers.</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Review Waiting for List: make next actions for any needed follow up. mark off recieved.</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Review Project and larger outcome lists: Evaluate status of each outcome/goal one by one.[0-100%Bars]</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Make at least one Next action for each one.</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">    Review any Plans, support materials, to trigger new actions or completetions.</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Review Any relevant checklists: use as trigger for any new actions.</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Review someday maybe list: transfer any projects outcomes that are now relevant, delete others.</label>
+      <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Add any new ideas to my system.</label>
+      <!-- <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">stop nurturing/never do again/learned from what? - to my weekly review doc</label> -->
+    </div>
+    <div id='layout'>
+      <div class='column'>
+        <div class='column'>
+          <textarea rows="9" cols="5" id="newItems"></textarea>
+          <button id="import">import</button>
+        </div>
+        <em>in</em><br>
+        <input type='text' value='' id="search"><br>
+        <div id='list'></div>
+        <em>@verbs</em><br>
+        <input type='text' value='' id="search2">
+          <div id='actionVerb'></div>
+          <br><em>outcome</em>
+            <input id='projectsInput'><br>
+            <input type="text" value='' id="actionAttached">
+          <div id='projects'></div>
+          <div id='calendar'></div>
+          <a href="https://docs.google.com/spreadsheet/ccc?key=0Arbw3VZyZ1zudHQ0MWtiYkFUdlZiYVItdl9aYWJMUVE#gid=2" target='_blank'>
+            <em>focus</em></a>
+          <input id='aofInput'><br>
+          <input id='aofAttached'><br>
+          <div id='aof'></div>
+          <a href="https://docs.google.com/spreadsheet/ccc?key=0Arbw3VZyZ1zudHQ0MWtiYkFUdlZiYVItdl9aYWJMUVE#gid=2" target='_blank'>
+            <em>milestones</em>
+          </a>
+          <input id='goalsInput'><br>
+          <input id='goalsAttached'><br>
+          <div id='goals'></div>
+          <a href="https://docs.google.com/document/d/1N_IG1j13_tz7ZjmZNp36K9TUESgbcbFTnBIbKTYsJmQ/edit#heading=h.uxuzqgrbxnvq" target='_blank'>
+            <em>vision</em>
+          </a>
+          <input id='visionInput'><br>
+          <input id='visionAttached'><br>
+        <div id='vision'></div>
+        <a href="https://www.google.com/calendar/render?tab=mc" target="_blank">
+            <em>@later</em>
+          </a>
+      </div>
+      <div class='column'>
+      <div id='doughnut'>o</div>
+      <!-- <button id='eraser'>erase</button> -->
+          <button id='filtration'>filterabc</button>
+          <button id='weeklyReview'>weeklyReview</button>
+          <button id='doing'>doing</button>
+      <div id='reveal' style="display: none">
+      <div id='viewing' >actions<br>
+        <textarea rows="40" cols="30" id="output"></textarea>
+      </div>
+        </div>
+
+        <div id='filtered' style="display: none">
+        </div>
+          </div>
+      </div>
+      <script>
+    </script>
+    <script src="library/script.js"></script>
+  </body>
+</html>

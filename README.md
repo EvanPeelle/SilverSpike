@@ -1,4 +1,4 @@
-SilverSpike
-===========
+GTD-Quicksilver
+===============
 
-streamlined gtd methodologies.
+Fastest streamlined workflow for GTD methodoligies, minus all the crap of typical task management software.

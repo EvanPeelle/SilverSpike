@@ -1,0 +1,61 @@
+<html>
+<head>
+  <meta charset='utf-8'>
+  <script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js" type="text/javascript"></script>
+  <script src="library/verbList.js"></script>
+  <script src="library/jquery.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="library/underscore.js"></script>
+  <link rel="stylesheet" href="library/style.css">
+</head>
+<body>
+  <button>one</button>
+  <div id='chart'></div>
+  <input id='in'>
+    <div id="take">take it from here
+      <li>@abc single</li>
+      <li>@home double</li>
+      <li>@abc triple</li>
+      <li>@home double</li>
+      <li>no good</li>
+    </div>
+    <div id="give">put it into here..
+    <li>@abc single</li>
+  </div>
+<script>
+
+// d3.selectAll('li').style('color', function(d,i){
+//   return "hsl(" + Math.random() * 360 + ",100%,50%)";
+// });
+
+d3.selectAll("div li")
+    .data([4, 8, 15, 16, 23, 22])
+    .style("font-size", function(d) { return d + "px"; });
+
+$('button').click(function() {
+    var one = $('#take li').length
+    
+    var d = d3.select("body").selectAll("li")
+      .data([one, 15, 11, 30, 20])
+      .style("font-size", function(d) { return d + "px"; });
+    //$('#take').append('<li>' + '</li>')
+})
+
+//awesome music:
+//http://www.youtube.com/watch?v=z0NPVJf3cYM&list=RD02xs8T__mV9hU
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+
+</html>
