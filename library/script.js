@@ -2,15 +2,15 @@
 
 var client = new Dropbox.Client({key: 'j37v18c5tdi8xu4'});
 client.authenticate();
+  // Client is authenticated. Display UI.
   if (client.isAuthenticated()) {
-    // Client is authenticated. Display UI.
     var datastoreManager = client.getDatastoreManager();
     datastoreManager.openDefaultDatastore(function (error, datastore) {
       if (error) {
         alert('Error opening default datastore: ' + error);
       }
       var taskTable = datastore.getTable('tasks');
-      //each record specified by horizon.
+      //each record by horizon
       var results = taskTable.query();
       var list = taskTable.query({horizon: 'listed'});
       var action = taskTable.query({horizon: 'action'});
@@ -19,133 +19,154 @@ client.authenticate();
       var goal = taskTable.query({horizon: 'goal'});
       var vision = taskTable.query({horizon: 'vision'});
       var wait = taskTable.query({horizon: 'wait'});
-      var calendar = taskTable.query({horizon: 'calendar'});
+      var someday = taskTable.query({horizon: 'someday'});
+      //each projectTable
+      var projectTable = datastore.getTable('projects');
+      var projectResults = projectTable.query();
+      var projectheadlines = projectTable.query({headline:true, completed:false});
+      var projectactions = projectTable.query({headline:false, completed:false});
 
+      //score of project actions completed
+      var indprojscore = projectTable.query({headline:false, completed:true});
 
-    var queries = [
-      {horizon: 'action'},
-      {horizon: 'project'},
-      {horizon: 'focus'},
-      {horizon: 'goal'},
-      {horizon: 'vision'},
-      {horizon: 'wait'},
-      {horizon: 'calendar'},
-      {completed: false}
-    ];
+      //generate headlines and divs of each project at start:
+      for (var k=0; k<projectheadlines.length;k++ ) {
+        $("#layout").append(
+          '<div class="column">'
+        + '<div class="listed">'
+        + '</div>'
+        + '<input class="next" type="text" value="" autofocus>'
+        + '<div class="listed2"></div>'
+        + "<h3>" + projectheadlines[k].get("projectname") + "</h3>"
+        // + '<textarea rows="4" cols="5" class="txt"></textarea>'//make persistant[and folding]
+      + '</div>');
+      };
 
-  //append all db items to projects div from the start.
-    for (var k=0; k<list.length;k++ ) {
-      $("#list").append( "<li>"+list[k].get("taskname") + "</li>");
-    };
+      //iterate over actions to place into each respective div
+      for (var k=0; k<projectactions.length; k++ ) {
+        var proname1 = projectactions[k].get('projectname')
+        var actionname2 = projectactions[k].get('actionname')
+        //for every h3 that matches the projectname, append the action.
+        $('h3').each(function(){
+          var $this = $(this);
+          if( $this.text() === proname1){
+            console.log($this.text())
+            $this.prev().prev().prev().append('<p>'+actionname2+'</p>')
+          }
+        });
+      };
 
-    //append all db items to projects div from the start.
-    for (var k=0; k<action.length;k++ ) {
-      $("#actionVerb").append( "<li>"+action[k].get("taskname") + "</li>");
-    };
-    //append all db items to projects div from the start.
-    for (var k=0; k<project.length;k++ ) {
-      $("#projects").append( "<li>"+project[k].get("taskname") + "</li>");
-    };
-    //append all db items to projects div from the start.
-    for (var k=0; k<focus.length;k++ ) {
-      $("#aof").append( "<li>"+focus[k].get("taskname") + "</li>");
-    };
-    //append all db items to projects div from the start.
-    for (var k=0; k<goal.length;k++ ) {
-      $("#goals").append( "<li>"+goal[k].get("taskname") + "</li>");
-    };
-    //append all db items to projects div from the start.
-    for (var k=0; k<vision.length;k++ ) {
-      $("#vision").append( "<li>"+vision[k].get("taskname") + "</li>");
-    };
-    //append all db items to projects div from the start.
-    for (var k=0; k<wait.length;k++ ) {
-      $("#waiting").append( "<li>"+wait[k].get("taskname") + "</li>");
-    };
-    //append all db items to projects div from the start.
-    for (var k=0; k<calendar.length;k++ ) {
-      $("#calendar").append( "<li>"+calendar[k].get("taskname") + "</li>");
-    };
+      // //delete entire datastore:
+      // for ( var k=0; k<projectResults.length;k++ ) {
+      //   projectResults[k].deleteRecord()
+      // };
 
-     //Update… visual
-    $('#doing').click(function(){
-      var aa = $('#list li').length;
-      var bb = $('#actionVerb li').length;
-      var cc = $('#projects li').length;
-      var dd = $('#aof li').length;
-      var ee = $('#goals li').length;
+      for (var k=0; k<list.length;k++ ) {
+        $("#list").append( "<li>"+list[k].get("taskname") + "</li>");
+      };
+
+      //append all db items to projects div from the start.
+      for (var k=0; k<action.length;k++ ) {
+        $("#actionVerb").append( "<li>"+action[k].get("taskname") + "</li>");
+      };
+      //append all db items to projects div from the start.
+      for (var k=0; k<project.length;k++ ) {
+        $("#projects").append( "<li>"+project[k].get("taskname") + "</li>");
+      };
+      //append all db items to projects div from the start.
+      for (var k=0; k<focus.length;k++ ) {
+        $("#aof").append( "<li>"+focus[k].get("taskname") + "</li>");
+      };
+      //append all db items to projects div from the start.
+      for (var k=0; k<goal.length;k++ ) {
+        $("#goals").append( "<li>"+goal[k].get("taskname") + "</li>");
+      };
+      //append all db items to projects div from the start.
+      for (var k=0; k<vision.length;k++ ) {
+        $("#vision").append( "<li>"+vision[k].get("taskname") + "</li>");
+      };
+      //append all db items to projects div from the start.
+      for (var k=0; k<wait.length;k++ ) {
+        $("#waiting").append( "<li>"+wait[k].get("taskname") + "</li>");
+      };
+      //append all db items to projects div from the start.
+      for (var k=0; k<someday.length;k++ ) {
+        $("#someday").append( "<li>"+someday[k].get("taskname") + "</li>");
+      };
+
+      //d3 visualizatin data:
+      var update = function(){
+        var a = $('#list li').length;
+        var b = $('#actionVerb li').length;
+        var c = $('#projects li').length;
+        var d = $('#aof li').length;
+        var e = $('#goals li').length;
+        var f = $('#vision li').length;
+        var data1= [
+            {"crimeType":"mip","totalCrimes":a},
+            {"crimeType":"theft","totalCrimes":b},
+            {"crimeType":"drugs","totalCrimes":c},
+            {"crimeType":"larson","totalCrimes":d},
+            {"crimeType":"homicide","totalCrimes":e},
+            {"crimeType":"suicide","totalCrimes":f}
+          ];
+        return data1;
+      };
+
+      //real time events update d3 visualization
+      $("body").bind('keydown', function(e) {
+        if (e.keyCode) {
+          change(update());
+        }
+      });
+
+      //Doughnut Specs
+      var width = 200,
+          height = 200,
+          radius = Math.min(width, height) / 2;
+      var color = d3.scale.ordinal()
+          .range(['#FFCC00', '#FF6633', '#CC0066', '#339933', '#009999', '#660099']);
+      var arc = d3.svg.arc()
+          .innerRadius(radius - 192)
+          .outerRadius(radius - 200);
+      var pie = d3.layout.pie()
+          .sort(null)
+          .value(function (d) {
+            return d.totalCrimes;
+          });
+
+      var svg = d3.select("#doughnut").append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .append("g")
+          .attr("id", "pieChart")
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
       var path = svg.selectAll("path")
-        .data(pie([ aa, bb, cc, dd, ee ]))
-        .enter().append("path")
-        .attr("fill", function(d, i) { return color(i); })
-        .attr("d", arc);
+          .data(pie(update()))
+          .enter()
+          .append("path");
 
-      // path = svg.selectAll("path")
-      // .data(pie(dataset.apples))
-      // .enter().append("path")
-      // .attr("fill", function(d, i) { return color(i); })
-      // .attr("d", arc);
-    })
+      path.transition()
+          .duration(500)
+          .attr("fill", function(d, i) { return color(i); })
+          .attr("d", arc)
+          .each(function(d) { this._current = d; }); // store the initial angles
 
-  // var aa = $('#list li').length;
-  // var bb = $('#actionVerb li').length;
-  // var cc = $('#projects li').length;
-  // var dd = $('#aof li').length;
-  // var ee = $('#goals li').length;
-
-  var aa = $('#list li').length;
-  var bb = $('#actionVerb li').length;
-  var cc = $('#projects li').length;
-  var dd = $('#aof li').length;
-  var ee = $('#goals li').length;
-
-
-  var dataset = {
-    apples: [ aa, bb, cc, dd, ee ],
-  };
-
-  //Doughnut Specs
-  var width = 350,
-      height = 280,
-      radius = Math.min(width, height) / 2;
-  var color = d3.scale.category20();
-  var pie = d3.layout.pie()
-      .sort(null);
-  var arc = d3.svg.arc()
-      .innerRadius(radius - 240)
-      .outerRadius(radius - 250);
-  var svg = d3.select("#doughnut").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-  var path = svg.selectAll("path")
-      .data(pie(dataset.apples))
-    .enter().append("path")
-      .attr("fill", function(d, i) { return color(i); })
-      .attr("d", arc);
-//=========================================================================
-
-    //delete all completed items on button click.
-    $('#eraser').click(function() {
-      var erasethem = taskTable.query();
-      for (var i = 0; i < erasethem.length; i++) {
-        erasethem[i].deleteRecord();
-        console.log('deleted', erasethem[i]);
-        console.log('worked');
+      function change(data){
+        path.data(pie(data));
+        path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
       }
-      $('li').remove();
-    });
-
-    //filter actions into div filter when clicked on any button
-    $('#filtration').click(function() {
-      $('#actionVerb li').sort(function(a, b) {
-          var at = $(a).text(), bt = $(b).text();
-          return (at > bt)?1:((at < bt)?-1:0);
-      }).appendTo($('#filtered'));
-    });
+      // Store the displayed angles in _current.
+      // Then, interpolate from _current to the new angles.
+      // During the transition, _current is updated in-place by d3.interpolate.
+      function arcTween(a) {
+        var i = d3.interpolate(this._current, a);
+        this._current = i(0);
+        return function(t) {
+          return arc(i(t));
+      };
+    }
 
     document.getElementById('search').focus();
     //inputID, keycode, divID
@@ -154,7 +175,7 @@ client.authenticate();
       ['search2',       65, '#actionVerb', 'action'],
       ['projectsInput', 80, '#projects',   'project'],
       ['aofInput',      70, '#aof',        'focus'],
-      ['',              67, '#calendar',   'calendar'],
+      ['someday',       83, '#someday',   'someday'],
       ['goalsInput',    71, '#goals',      'goal'],
       ['visionInput',   86, '#vision',     'vision'],
       ['waitingInput',  87, '#waiting',    'wait']
@@ -179,7 +200,7 @@ client.authenticate();
     //import textarea
     $('#import').click(function() {
       var items = $('#newItems').val().split('\n');
-      if(items == false){return false}
+      if(items == false){return false};
       $('#newItems').val('');
       _.each(items, function(item){
         //add to dp from importer
@@ -189,7 +210,7 @@ client.authenticate();
           completed: false,
           horizon: 'listed',
           created: new Date()
-        })
+        });
       });
     });
 
@@ -206,7 +227,7 @@ client.authenticate();
           completed: false,
           horizon: 'listed',
           created: new Date()
-        })
+        });
         return false;
       }
     }).keyup();
@@ -251,50 +272,16 @@ client.authenticate();
     }
     doWork();
 
-    //shift + T : output actions in form as a list
-    $("body").bind('keydown', function(e) {
-      if (e.shiftKey && e.keyCode == 84) {
-        $( "#reveal" ).show( "slow" );
-        var formFill = '';
-
-        $('#actionVerb li').sort(function(a, b) {
-          var at = $(a).text();
-          var bt = $(b).text();
-          return (at > bt) ? 1 : ((at < bt) ? -1 : 0);
-        }).appendTo($('#filtered'));
-  //remove this extra step.
-        $('#filtered li').each(function(index, elem) {
-          var content = $(this).text();
-          formFill = formFill + content + '\n';
-        });
-      $('#output').val(formFill);
-      return false;
-      }
-    });
-
-//shift + R = moves into work mode panel...
-    $("body").bind('keydown', function(e) {
-      if (e.shiftKey && e.keyCode == 82) {
-        $( "#filtered" ).toggle('show')
-//trying to activate the panel to open on screen.
-
-      }
-    })
-
     //delete within each list[√]
     $("body").bind('keydown', function(e) {
       if (e.shiftKey && e.keyCode == 68) {
         var doc = document.activeElement;
         for (var i = 0; i < combined.length; i++) {
           if($(doc).attr('id') == combined[i][0]){
-
             //removing from dp in any div
             var data = $(combined[i][2]).children().first().text();
-            console.log(data);
             var results = taskTable.query({taskname: data});
-            console.log(results);
             results[0].deleteRecord();
-
             $(combined[i][2]).children().first().remove();
           }
         }
@@ -345,7 +332,8 @@ client.authenticate();
           var connectee = combinedAppend[j+1][1];
           var value2 = $(connected).val();
 
-          if (e.keyCode == 13) { //newone => enter
+          //newone => enter
+          if (e.keyCode == 13) {
             if(value2 == false){return false}
             $(connector).prepend('<li>' + value2 + '</li>');
             $(connected).val('');
@@ -357,10 +345,10 @@ client.authenticate();
               horizon: combinedAppend[j][2],
               created: new Date()
             })
-
             return false;
           }
-          else if (e.shiftKey && e.keyCode == 68) { //delete => d
+          //delete => d
+          else if (e.shiftKey && e.keyCode == 68) {
             //removing from dp in other div
             var inputfirst = $(connectee).children().first().text();
             var inputresults = taskTable.query({taskname: inputfirst});
@@ -370,7 +358,8 @@ client.authenticate();
             $(connectee).val('');
             return false;
           }
-          else if (e.shiftKey && e.keyCode == 78) { //next => n
+          //next => n
+          else if (e.shiftKey && e.keyCode == 78) {
             $(connectee).val('');
             var contained = $(connectee).children().first().get();
             $(connectee).append(contained);
@@ -380,5 +369,148 @@ client.authenticate();
         }
       }
     });
+
+  $("body").bind('keydown', function(e) {
+    if($(document.activeElement).prev('.listed').length) {
+      //enter = create a new <p> action
+      if(e.keyCode == 13){
+        var value = $(document.activeElement).val();
+        $(document.activeElement).prev().append('<p>'+value+'</p>');
+
+        //get h3 text to label record with + action name.
+        var projh3 = $(document.activeElement).next().next().text();
+
+        //persistant actions:
+        var firstProject = projectTable.insert({
+          headline: false,
+          projectname: projh3,
+          actionname: value,
+          nextaction: false,
+          context: '@computer',
+          completed: false,
+          waiting: false,
+          created: new Date()
+        });
+        $(document.activeElement).val('');
+      }
+       //shift Q = complete project pod
+      if (e.shiftKey && e.keyCode == 81)  {
+        //complete or delete action
+        var deleteIt = $(document.activeElement).next().next('h3').text();
+        console.log(deleteIt)
+        var projResults = projectTable.query({projectname: deleteIt, headline: true});
+        console.log(projResults[0])
+        projResults[0].set('completed', true);
+        e.preventDefault();
+        $(document.activeElement).val('');
+/*f;*/        $(document.activeElement).parent().remove()
+      }
+      //shift D = complete || delete it
+      if (e.shiftKey && e.keyCode == 68)  {
+        $(document.activeElement).prev().children('p').last().css( "color", "#7CCD7C" );
+        //complete or delete action
+        var deleteIt = $(document.activeElement).prev().children('p').last().text();
+        var projResults = projectTable.query({actionname: deleteIt});
+        projResults[0].set('completed', true);
+        // projResults[0].deleteRecord();
+        e.preventDefault();
+        $(document.activeElement).val('');
+      }
+      //shift W = waiting on
+      if (e.shiftKey && e.keyCode == 87)  {
+        $(document.activeElement).prev().children('p').last().css( "color", "#ff6666" );
+        //update to true ->
+        var waitonit = $(document.activeElement).prev().children('p').last().text();
+        var projResults = projectTable.query({actionname: waitonit});
+        projResults[0].set('waiting', true);
+        e.preventDefault();
+        $(document.activeElement).val('');
+      }
+      //shift C = continue
+      if (e.shiftKey && e.keyCode == 67)  {
+        $(document.activeElement).prev().children('p').last().css( "color", "#00aaff" );
+        //change back to false
+        var waitnomore = $(document.activeElement).prev().children('p').last().text();
+        var projResults = projectTable.query({actionname: waitnomore});
+        projResults[0].set('waiting', false);
+        e.preventDefault();
+        $(document.activeElement).val('');
+      }
+      //previous => shift p
+      if (e.shiftKey && e.keyCode == 80) {
+        $(document.activeElement).val('');
+        var contained = $(document.activeElement).prev().children('p').last().get();
+        $(contained).prependTo($(document.activeElement).next())
+        e.preventDefault();
+        $(document.activeElement).val('');
+      }
+      //next => shift n
+      if (e.shiftKey && e.keyCode == 78) {
+        $(document.activeElement).val('');
+        var contained2 = $(document.activeElement).next().children('p').first().get();
+        $(contained2).appendTo($(document.activeElement).prev())
+        e.preventDefault();
+        $(document.activeElement).val('');
+      }
+    }
+  })
+
+// var x = $('.column').find('h3').length;
+var x = $('*:contains("a")').length;
+console.log(x)
+
+    //shift + T
+    $("body").bind('keydown', function(e) {
+      if (e.shiftKey && e.keyCode == 84) {
+      var projectItem = $('#projects li').first().text();
+
+        //create a new div for that project
+        // if( $('.column').find('h3').length == 0 ){
+
+        $('#layout').append(
+          '<div class="column">'
+          + '<div class="listed">'
+          + '</div>'
+          + '<input class="next" type="text" value="" autofocus>'
+          + '<div class="listed2"></div>'
+          + '<h3>' + projectItem + '</h3>'
+        + '</div>'
+        );
+        //create persistence:
+        var firstProject = projectTable.insert({
+            headline: true,
+            projectname: projectItem,
+            actionname: 'no action',
+            nextaction: false,
+            context: '@computer',
+            completed: false,
+            waiting: false,
+            created: new Date()
+        });
+        // }
+      var formFill = '';
+      $(document.activeElement).val(formFill);
+      }
+    });
+
+    //Beginning of the summary dashboard of @contexts...3 divs
+    //@home, @work, @phone, @computer, etc
+    //Another summary of next actions  and waiting fors.... 2 divs
+    //   //   $('#actionVerb li').sort(function(a, b) {
+    //   //     var at = $(a).text();
+    //   //     var bt = $(b).text();
+    //   //     return (at > bt) ? 1 : ((at < bt) ? -1 : 0);
+    //   //   }).appendTo($(document.activeElement).parent('div').parent('div'));
+    //   // return false;
+    // };
+
+
+
+
+
+
+
+
+
   });
-};
+}

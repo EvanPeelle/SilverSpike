@@ -1,58 +1,38 @@
 <!-- PURPOSE:
-speed up and clearly
-/collect      [√]
-/process      [√]
-/context/filt [ ]
-/execute      [ ]
-/update       [ ]
-/track progss [ ]
-single place. [ ]
-
 DESIGNED:
 depth of execution with many actions in line.
 [not spreading thinner with many types]
-gamify productivity [ ]
-waits/done          [ ]
-now whats/          [ ]
-depth of action     [ ]
-completion/         [ ]
-project pods -      [ ]
-speed of work flow, [ ]
-simplicity of visual[ ]
-flexibility of items[ ]
-vis prod in stages. [ ]
+/context/filt [ ]*
+/track progss [+]
+/gamify productivity [ ]
+/vis prod in stages. [ ]
 
 BUGS:
-- making graph responsive to number of li's per horizon.
+- making doughnut responsive.
+
 - git authorization key is still there - security.
-- remove duplicate speed key for each input.
+- vision input broken. line 307
+
+PRODUCT TODOS:
+filtering - move actions from weekly to doing project(speed key)
+filtering - show a quick view of next actions and waiting fors(summary box)
+filtering - show each action by context at bottom of page(summary box)
+filtering - create a waiting for time to recall
+filtering - create a delegat button for bucket to show up later
+filtering - create multiple divs for each action context type in a project
+filtering - create a logic tree option on waiting actions
+filtering - create folding projects if not active(showing only actions and waiting in summary boxes)
+visualize - the completed actions of day/projects open/rate of change/etc/gant chart
+connect with twillio api
+- sms message on the go events to my phone as text messages
+
+host site for global access
 
 PERSONAL GROWTH:
 refactor in design patterns iif
+refactor with .prototype
+auto refresh browser when working on it in sublime
 
-PRODUCT TODOS:
-- consider reference and how that might be handled...???
-- Someday maybe category & How to interact with it???
-- DONE function and how to deal with that query for future reference.
- - place all of the stickies dones' into it as list items imported...
-- connect with twillio api
-  - sms message on the go events to my phone as text messages
-- host site for global access
-- develop a doing dashboard
- - shift over to that page fully
- - do i host another page? or Jquery good enough, Backbone?
- - speed key menu for this page only.
-- complete a task and it adds to a graph bar, # of tasks created and done. or % complete of total for the day
-- folding projects bullet points for reference...?
-- filter by projects(add persistant tag)
-- develop gant/odesk/wait pushing, action hoping setup.
-- logic tree development on project paths using actions and waiting.
-
-COSMETICS:
-- add a % of in to rest in the center of the d3 graph.
-- color coding the graph with the type text.
-- moving headlines of inputs to the left side.
-- css classing system (remove ids) formatting
 
 MAYBE:
 - browser window launcher on a schedule.
@@ -60,9 +40,35 @@ MAYBE:
 - develop a timely send down of desktop tasks.(csv download?)
 
 
-
-
 DONE:
+- delete projects as done...
+/execute      [√]
+/update       [√]
+/collect      [√]
+/process      [√]
+single place. [√]
+waits/done          [√]
+depth of action     [√]
+completion/         [√]
+project pods -      [√]
+speed of work flow, [√]
+simplicity of visual[√]
+flexibility of items[√]
+- css classing system (remove ids) formatting
+- color coding the graph with the type text.
+reference scratch pad
+- remove duplicate speed key for each input.
+tag further actions with that project name
+- develop a DOing DASH
+ - shift over to that page fully
+ - do i host another page? or Jquery good enough, Backbone?
+ - speed key menu for this page only.
+- probably create a new project with each rehaul in the weekly review.
+  - choose only a select few projects to track and work on over time.
+- seperate all the work and personal lists
+- DONE function and how to deal with that query for future reference.
+ - place all of the stickies dones' into it as list items imported...
+- Someday maybe category & How to interact with it???
 - placing a horizon tag on each item processed through list.
 //build a place to send those items in HTML.
     //integrate the functionality with the location.
@@ -91,4 +97,3 @@ my mind needs to be clearer than the code.
 - do server stuff on another file all together for experimentation.
 - figure out how to join the two.
 - contact staff dude de cruz, peter, to consult.
- -->

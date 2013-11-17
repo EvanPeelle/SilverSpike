@@ -11,10 +11,10 @@ span {
 }
 
 button {
-  padding: 10px;
+  /*padding: 10px;*/
   font-size: 16px;
   width: 400px;
-  height: 35px;
+  height: 22px;
   outline-width: 0px;
   border-bottom-right-radius: 7px;
   border-bottom-left-radius:  7px;
@@ -29,10 +29,6 @@ button {
 button:focus {
     box-shadow: 0px 0px 5pt 2pt #ededed;
 }
-
-.inputs{}
-.divs{}
-.buckets{}
 
 input[type='checkbox'] {
     width: 21px;
@@ -49,9 +45,8 @@ label{
 }
 
 #layout {
-  margin: auto;
-  width :840px;
-  padding-left:50px;
+  padding-left:30px;
+
 }
 
 #importColumn {
@@ -60,17 +55,26 @@ label{
 
 .column {
   width: 400px;
-  margin: 0px auto;
-  position: relative;
-  float:left;
-  padding-top: 10px;
+  margin:20px;
+  /*position: relative; */
+  display:inline-block;
+  /*position: inherit; */
+  float:right;
+  padding: 40px;
+  box-shadow: 0px 0px 5pt 0pt gray;
+  border-radius: 10px;
 }
 
+.listed2 {
+  color:gray;
+}
+
+
 #viewing {
-  margin: 0px auto;
+  /*margin: 0px auto;*/
   width: 400px;
-  float:left;
-  padding-top: 0px;
+  /*float:left;
+  padding-top: 0px;*/
 
 }
 #reveal {
@@ -113,7 +117,7 @@ textarea:focus {
 }
 
 #output {
-  height: 400px;
+  height: 150px;
 }
 
 #output2 {
@@ -122,10 +126,10 @@ textarea:focus {
 
 input {
   font-family: monaco;
-  padding: 10px;
+  /*padding: 10px;*/
   font-size: 16px;
   width: 400px;
-  height: 35px;
+  height: 20px;
   outline-width: 0px;
   border-radius: 7px;
   border: 1px;

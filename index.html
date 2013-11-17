@@ -11,7 +11,10 @@
   </head>
   <body>
     <title>GTD</title>
-    <div id='weeklyReview' style="display: none">Weekly Review Checklist<br>
+    <div id='layout'>
+          <div class='column' style="display: none">
+    <div id='weeklyReview'>
+      Weekly Review Checklist<br>
       <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Collect all surrounding items, and put away</label>
       <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">collect all loose papers and materials into inbox</label>
       <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Get in to zero: process all into system
@@ -31,12 +34,11 @@
       <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">Add any new ideas to my system.</label>
       <!-- <input type="checkbox" name="checkbox" class="checkbox_id" value="value"><label for="checkbox_id">stop nurturing/never do again/learned from what? - to my weekly review doc</label> -->
     </div>
-    <div id='layout'>
+  </div>
       <div class='column'>
-        <div class='column'>
+        <div id='doughnut'></div>
           <textarea rows="9" cols="5" id="newItems"></textarea>
           <button id="import">import</button>
-        </div>
         <em>in</em><br>
         <input type='text' value='' id="search"><br>
         <div id='list'></div>
@@ -47,7 +49,6 @@
             <input id='projectsInput'><br>
             <input type="text" value='' id="actionAttached">
           <div id='projects'></div>
-          <div id='calendar'></div>
           <a href="https://docs.google.com/spreadsheet/ccc?key=0Arbw3VZyZ1zudHQ0MWtiYkFUdlZiYVItdl9aYWJMUVE#gid=2" target='_blank'>
             <em>focus</em></a>
           <input id='aofInput'><br>
@@ -69,24 +70,27 @@
             <em>@later</em>
           </a>
       </div>
-      <div class='column'>
-      <div id='doughnut'>o</div>
-      <!-- <button id='eraser'>erase</button> -->
-          <button id='filtration'>filterabc</button>
-          <button id='weeklyReview'>weeklyReview</button>
-          <button id='doing'>doing</button>
-      <div id='reveal' style="display: none">
-      <div id='viewing' >actions<br>
-        <textarea rows="40" cols="30" id="output"></textarea>
-      </div>
-        </div>
+    <div class='column' style="display: none">
+      <div id='someday'>someday/maybe</div>
+      <div id='done' style="display: none">done</div>
+    </div>
+    </div>
+    <input type="radio"
+  name="radData"
+  id="rad1"
+  value="data1"
+  checked="checked"
+  onclick="change(dataset.apples);">
 
-        <div id='filtered' style="display: none">
-        </div>
-          </div>
-      </div>
-      <script>
-    </script>
+          <label for="rad1">Data1</label>
+
+  <input type="radio"
+  name="radData"
+  id="rad2"
+  value="data2"
+  onclick="change(dataset2.apples2);">
+
+          <label for="rad2">Data2</label>
     <script src="library/script.js"></script>
   </body>
 </html>

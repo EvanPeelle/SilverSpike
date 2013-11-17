@@ -6,50 +6,105 @@
   <script src="library/jquery.js"></script>
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="library/underscore.js"></script>
+
   <link rel="stylesheet" href="library/style.css">
 </head>
 <body>
-  <button>one</button>
-  <div id='chart'></div>
-  <input id='in'>
-    <div id="take">take it from here
-      <li>@abc single</li>
-      <li>@home double</li>
-      <li>@abc triple</li>
-      <li>@home double</li>
-      <li>no good</li>
-    </div>
-    <div id="give">put it into here..
-    <li>@abc single</li>
-  </div>
+
+  <input type="radio"
+  name="radData"
+  id="rad1"
+  value="data1"
+  checked="checked"
+  onclick="change(data1);">
+
+          <label for="rad1">Data1</label>
+
+  <input type="radio"
+  name="radData"
+  id="rad2"
+  value="data2"
+  onclick="change(data2);">
+
+          <label for="rad2">Data2</label>
+        <br>
+        <div id="chartDiv">
 <script>
+var a = 1
+        var b = 2
+        var c = 3
+var data1= [{"crimeType":"mip","totalCrimes":a},{"crimeType":"theft","totalCrimes":b},{"crimeType":"drugs","totalCrimes":c}];
 
-// d3.selectAll('li').style('color', function(d,i){
-//   return "hsl(" + Math.random() * 360 + ",100%,50%)";
-// });
-
-d3.selectAll("div li")
-    .data([4, 8, 15, 16, 23, 22])
-    .style("font-size", function(d) { return d + "px"; });
-
-$('button').click(function() {
-    var one = $('#take li').length
-    
-    var d = d3.select("body").selectAll("li")
-      .data([one, 15, 11, 30, 20])
-      .style("font-size", function(d) { return d + "px"; });
-    //$('#take').append('<li>' + '</li>')
-})
-
-//awesome music:
-//http://www.youtube.com/watch?v=z0NPVJf3cYM&list=RD02xs8T__mV9hU
-
-
+      var update = function(){
+        a++
+        var data1= [{"crimeType":"mip","totalCrimes":a},{"crimeType":"theft","totalCrimes":b},{"crimeType":"drugs","totalCrimes":c}];
+        return data1;
+      }
+      //event to show the change/update in <li>
+      $("body").bind('keydown', function(e) {
+        if (e.keyCode == 13) {
+          console.log(update())
+          console.log('worked')
+          change(update())
+        }
+      })
+// //awesome music:
+// //http://www.youtube.com/watch?v=z0NPVJf3cYM&list=RD02xs8T__mV9hU
 
 
 
 
+var width = 800,
+    height = 250,
+    radius = Math.min(width, height) / 2;
 
+var color = d3.scale.ordinal()
+    .range(["#7b6888", "#a05d56", "#d0743c", "#ff8c00"]);
+
+var arc = d3.svg.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(radius - 70);
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function (d) {
+    return d.totalCrimes;
+});
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("id", "pieChart")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var path = svg.selectAll("path")
+      .data(pie(data1))
+      .enter()
+      .append("path");
+
+      path.transition()
+      .duration(500)
+      .attr("fill", function(d, i) { return color(i); })
+      .attr("d", arc)
+      .each(function(d) { this._current = d; }); // store the initial angles
+
+    function change(data){
+      path.data(pie(data));
+      path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+
+  }
+
+// Store the displayed angles in _current.
+// Then, interpolate from _current to the new angles.
+// During the transition, _current is updated in-place by d3.interpolate.
+function arcTween(a) {
+  var i = d3.interpolate(this._current, a);
+  this._current = i(0);
+  return function(t) {
+    return arc(i(t));
+  };
+}
 
 
 

@@ -14,34 +14,43 @@
   <title>GTD WorkFlow</title>
      <div id = "alphabetical">
        <li>First Action to do in this context</li>
-       <input class="next" type="text" value="wat">
+       <input class="next" type="text" value="wat" autofocus>
        <!-- <li>Second Action to do in this context</li> -->
 
      </div>
     <script>
+$( "input" ).focus();
 
-
+var projectName = "project name here"
 
 $('body').bind('keydown', function(e) {
   if (e.keyCode == 13) {
     var value = $('.next').val()
     console.log(value)
-    $('#alphabetical').append('<li>' + value + '</li>' + '<input class="next" type="text" value="">');
+    $('p:first').remove();
+    $('#alphabetical').append('<li>' + value + '</li>' + '<input class="next" type="text" value=""><p>' + projectName + '</p>');
     $('.next:first').remove();
-
-
+    $( "input" ).focus();
+}
+  //shift D = complete
+  if (e.shiftKey && e.keyCode == 68)  {
+    $('#alphabetical li:last').css( "background-color", "green" );
+  }
+  //shift W = waiting on
+  if (e.shiftKey && e.keyCode == 87)  {
+    $('#alphabetical li:last').css( "background-color", "blue" );
+  }
+  //shift C = clear previous
+  if (e.shiftKey && e.keyCode == 67)  {
+    $('#alphabetical li:last').css( "background-color", "blue" );
   }
 });
 
-
-
-//press return to complete item.
+//then do if/yes/no(left or right)
+//do 4 buckets for context of actions. timeline.
+//@comp/phone/out/person
 //press next to shuffle them.
 
-//when item completed - fade out, then input / wait - with y o n logic. / or something...
-  //have it tracked as a project...
-
-  //if item is to soon, in sequence with another, then move to the right(away).
 
 
   </script>
