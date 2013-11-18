@@ -11,15 +11,15 @@ client.authenticate();
       }
       var taskTable = datastore.getTable('tasks');
       //each record by horizon
-      var results = taskTable.query();
-      var list = taskTable.query({horizon: 'listed'});
-      var action = taskTable.query({horizon: 'action'});
-      var project = taskTable.query({horizon: 'project'});
-      var focus = taskTable.query({horizon: 'focus'});
-      var goal = taskTable.query({horizon: 'goal'});
-      var vision = taskTable.query({horizon: 'vision'});
-      var wait = taskTable.query({horizon: 'wait'});
-      var someday = taskTable.query({horizon: 'someday'});
+      var results = taskTable.query({completed:false});
+      var list = taskTable.query({horizon: 'listed', completed:false});
+      var action = taskTable.query({horizon: 'action', completed:false});
+      var project = taskTable.query({horizon: 'project', completed:false});
+      var focus = taskTable.query({horizon: 'focus', completed:false});
+      var goal = taskTable.query({horizon: 'goal', completed:false});
+      var vision = taskTable.query({horizon: 'vision', completed:false});
+      var wait = taskTable.query({horizon: 'wait', completed:false});
+      var someday = taskTable.query({horizon: 'someday', completed:false});
       //each projectTable
       var projectTable = datastore.getTable('projects');
       var projectResults = projectTable.query();
@@ -28,11 +28,30 @@ client.authenticate();
 
       //score of project actions completed
       var indprojscore = projectTable.query({headline:false, completed:true});
+      var nextactions = projectTable.query({headline:false, nextaction:true, completed:false});
+      var waitingfor = projectTable.query({headline:false, waiting:true, completed:false});
+
+
+// //delete entire datastore:
+//       for ( var k=0; k<projectResults.length;k++ ) {
+//         projectResults[k].deleteRecord()
+//       };
+
+
+
+
+
+      for (var k=0; k<nextactions.length;k++ ) {
+        $("#nextactions").append( "<p>"+nextactions[k].get("actionname") + "</p>");
+      };
+      for (var k=0; k<waitingfor.length;k++ ) {
+        $("#waitingfor").append( "<p>"+waitingfor[k].get("actionname") + "</p>");
+      };
 
       //generate headlines and divs of each project at start:
       for (var k=0; k<projectheadlines.length;k++ ) {
-        $("#layout").append(
-          '<div class="column">'
+        $("#row").append(
+          '<div class="column2">'
         + '<div class="listed">'
         + '</div>'
         + '<input class="next" type="text" value="" autofocus>'
@@ -50,16 +69,12 @@ client.authenticate();
         $('h3').each(function(){
           var $this = $(this);
           if( $this.text() === proname1){
-            console.log($this.text())
             $this.prev().prev().prev().append('<p>'+actionname2+'</p>')
           }
         });
       };
 
-      // //delete entire datastore:
-      // for ( var k=0; k<projectResults.length;k++ ) {
-      //   projectResults[k].deleteRecord()
-      // };
+      
 
       for (var k=0; k<list.length;k++ ) {
         $("#list").append( "<li>"+list[k].get("taskname") + "</li>");
@@ -125,7 +140,8 @@ client.authenticate();
           height = 200,
           radius = Math.min(width, height) / 2;
       var color = d3.scale.ordinal()
-          .range(['#FFCC00', '#FF6633', '#CC0066', '#339933', '#009999', '#660099']);
+          .range(['#FFCC00', '#FF6633', '#CC0066', '#31a354', '#17becf', '#660099']);
+          // .range(['#e7ba52', '#fdae6b', '#d6616b', '#74c476', '#6baed6', '#1f77b4']);
       var arc = d3.svg.arc()
           .innerRadius(radius - 192)
           .outerRadius(radius - 200);
@@ -185,6 +201,7 @@ client.authenticate();
       ['actionAttached', '#actionVerb', 'action'],
       ['aofAttached',    '#projects',   'project'],
       ['goalsAttached',  '#aof',        'focus'],
+      ['visionAttached', '#goals',      'goal'],
       ['visionAttached', '#goals',      'goal']
     ];
 
@@ -246,7 +263,7 @@ client.authenticate();
 
               $(combined[j][2]).append(passed);
               //dp access to update horizon
-              var results = taskTable.query({taskname: data});
+              var results = taskTable.query({taskname: data, completed:false});
               results[0].set('horizon', combined[j][3]);
 
               return false;
@@ -362,7 +379,7 @@ client.authenticate();
           else if (e.shiftKey && e.keyCode == 78) {
             $(connectee).val('');
             var contained = $(connectee).children().first().get();
-            $(connectee).append(contained);
+            $(connectee).append(contained)
             e.preventDefault();
             return false;
           }
@@ -370,105 +387,107 @@ client.authenticate();
       }
     });
 
-  $("body").bind('keydown', function(e) {
-    if($(document.activeElement).prev('.listed').length) {
-      //enter = create a new <p> action
-      if(e.keyCode == 13){
-        var value = $(document.activeElement).val();
-        $(document.activeElement).prev().append('<p>'+value+'</p>');
+    $("body").bind('keydown', function(e) {
+      if($(document.activeElement).prev('.listed').length) {
+        //enter = create a new <p> action
+        if(e.keyCode == 13){
+          var value = $(document.activeElement).val();
+          $(document.activeElement).prev().append('<p>'+value+'</p>');
 
-        //get h3 text to label record with + action name.
-        var projh3 = $(document.activeElement).next().next().text();
+          //get h3 text to label record with + action name.
+          var projh3 = $(document.activeElement).next().next().text();
 
-        //persistant actions:
-        var firstProject = projectTable.insert({
-          headline: false,
-          projectname: projh3,
-          actionname: value,
-          nextaction: false,
-          context: '@computer',
-          completed: false,
-          waiting: false,
-          created: new Date()
-        });
-        $(document.activeElement).val('');
+          //persistant actions:
+          var firstProject = projectTable.insert({
+            headline: false,
+            projectname: projh3,
+            actionname: value,
+            nextaction: false,
+            context: '@computer',
+            completed: false,
+            waiting: false,
+            created: new Date()
+          });
+          $(document.activeElement).val('');
+        }
+        //shift Q = complete project pod
+        if (e.shiftKey && e.keyCode == 81)  {
+          //complete or delete action
+          var deleteIt = $(document.activeElement).next().next('h3').text();
+          var projResults = projectTable.query({projectname: deleteIt, headline: true});
+          projResults[0].set('completed', true);
+          e.preventDefault();
+          $(document.activeElement).val('');
+          $(document.activeElement).parent().remove()
+        }
+        //shift D = complete || delete it
+        if (e.shiftKey && e.keyCode == 68)  {
+          $(document.activeElement).prev().children('p').last().css( "color", "#7CCD7C" );
+          //complete or delete action
+          var deleteIt = $(document.activeElement).prev().children('p').last().text();
+          var projResults = projectTable.query({actionname: deleteIt});
+          projResults[0].set('completed', true);
+          // projResults[0].deleteRecord();
+          e.preventDefault();
+          $(document.activeElement).val('');
+        }
+        //shift W = waiting on
+        if (e.shiftKey && e.keyCode == 87)  {
+          $(document.activeElement).prev().children('p').last().css( "color", "#ff6666" );
+          //update to true ->
+          var waitonit = $(document.activeElement).prev().children('p').last().text();
+          var projResults = projectTable.query({actionname: waitonit});
+          projResults[0].set('waiting', true);
+          e.preventDefault();
+          $(document.activeElement).val('');
+        }
+        //shift C = continue
+        if (e.shiftKey && e.keyCode == 67)  {
+          $(document.activeElement).prev().children('p').last().css( "color", "#00aaff" );
+          //change back to false
+          var waitnomore = $(document.activeElement).prev().children('p').last().text();
+          var projResults = projectTable.query({actionname: waitnomore});
+          projResults[0].set('waiting', false);
+          e.preventDefault();
+          $(document.activeElement).val('');
+        }
+        //previous => shift p
+        if (e.shiftKey && e.keyCode == 80) {
+          $(document.activeElement).val('');
+          var contained = $(document.activeElement).prev().children('p').last().get();
+          $(contained).prependTo($(document.activeElement).next())
+          e.preventDefault();
+          $(document.activeElement).val('');
+        }
+        //next => shift n
+        if (e.shiftKey && e.keyCode == 78) {
+          $(document.activeElement).val('');
+          var contained2 = $(document.activeElement).next().children('p').first().get();
+          $(contained2).appendTo($(document.activeElement).prev())
+          e.preventDefault();
+          $(document.activeElement).val('');
+        }
+        //next action => shift a
+        if (e.shiftKey && e.keyCode == 65) {
+          var contained2 = $(document.activeElement).prev().children('p').last().text()
+          $(document.activeElement).prev().children('p').last().css('color', 'green')
+          var projResults = projectTable.query({actionname: contained2});
+          projResults[0].set('nextaction', true);
+          e.preventDefault();
+          $(document.activeElement).val('');
+        }
       }
-       //shift Q = complete project pod
-      if (e.shiftKey && e.keyCode == 81)  {
-        //complete or delete action
-        var deleteIt = $(document.activeElement).next().next('h3').text();
-        console.log(deleteIt)
-        var projResults = projectTable.query({projectname: deleteIt, headline: true});
-        console.log(projResults[0])
-        projResults[0].set('completed', true);
-        e.preventDefault();
-        $(document.activeElement).val('');
-/*f;*/        $(document.activeElement).parent().remove()
-      }
-      //shift D = complete || delete it
-      if (e.shiftKey && e.keyCode == 68)  {
-        $(document.activeElement).prev().children('p').last().css( "color", "#7CCD7C" );
-        //complete or delete action
-        var deleteIt = $(document.activeElement).prev().children('p').last().text();
-        var projResults = projectTable.query({actionname: deleteIt});
-        projResults[0].set('completed', true);
-        // projResults[0].deleteRecord();
-        e.preventDefault();
-        $(document.activeElement).val('');
-      }
-      //shift W = waiting on
-      if (e.shiftKey && e.keyCode == 87)  {
-        $(document.activeElement).prev().children('p').last().css( "color", "#ff6666" );
-        //update to true ->
-        var waitonit = $(document.activeElement).prev().children('p').last().text();
-        var projResults = projectTable.query({actionname: waitonit});
-        projResults[0].set('waiting', true);
-        e.preventDefault();
-        $(document.activeElement).val('');
-      }
-      //shift C = continue
-      if (e.shiftKey && e.keyCode == 67)  {
-        $(document.activeElement).prev().children('p').last().css( "color", "#00aaff" );
-        //change back to false
-        var waitnomore = $(document.activeElement).prev().children('p').last().text();
-        var projResults = projectTable.query({actionname: waitnomore});
-        projResults[0].set('waiting', false);
-        e.preventDefault();
-        $(document.activeElement).val('');
-      }
-      //previous => shift p
-      if (e.shiftKey && e.keyCode == 80) {
-        $(document.activeElement).val('');
-        var contained = $(document.activeElement).prev().children('p').last().get();
-        $(contained).prependTo($(document.activeElement).next())
-        e.preventDefault();
-        $(document.activeElement).val('');
-      }
-      //next => shift n
-      if (e.shiftKey && e.keyCode == 78) {
-        $(document.activeElement).val('');
-        var contained2 = $(document.activeElement).next().children('p').first().get();
-        $(contained2).appendTo($(document.activeElement).prev())
-        e.preventDefault();
-        $(document.activeElement).val('');
-      }
-    }
-  })
-
-// var x = $('.column').find('h3').length;
-var x = $('*:contains("a")').length;
-console.log(x)
+    })
 
     //shift + T
-    $("body").bind('keydown', function(e) {
+    $("#projectsInput").bind('keydown', function(e) {
+
       if (e.shiftKey && e.keyCode == 84) {
       var projectItem = $('#projects li').first().text();
 
-        //create a new div for that project
-        // if( $('.column').find('h3').length == 0 ){
-
-        $('#layout').append(
-          '<div class="column">'
+        //create a new div for that project *duplicate*
+        $('#row').append(
+          '<div class="column2">'
           + '<div class="listed">'
           + '</div>'
           + '<input class="next" type="text" value="" autofocus>'
@@ -487,12 +506,41 @@ console.log(x)
             waiting: false,
             created: new Date()
         });
-        // }
-      var formFill = '';
-      $(document.activeElement).val(formFill);
+        var formFill = '';
+        $(document.activeElement).val(formFill);
       }
     });
 
+//move action across the pods.
+    $("#search2").bind('keydown', function(e) {
+          if (e.shiftKey && e.keyCode == 84) {
+          var actionItem = $('#actionVerb li').first().text();
+          $('#actionVerb li').first().css('background-color', 'gray');
+
+//take length of # of divs of column2.
+//iterate over them one by one increment.
+//remove the append each time from the one previous.
+//update the persistence each time.
+//when it hits the end, start the increment over.
+  //have the next actions be updating every time the key is pressed(waiting too)
+
+            $('.listed2').append('<p>' + actionItem + '</p>');
+            var projectName = $('.listed2').next().text();
+            //create persistence:
+            var firstProject = projectTable.insert({
+                headline: false,
+                projectname: projectName,
+                actionname: actionItem,
+                nextaction: false,
+                context: '@computer',
+                completed: false,
+                waiting: false,
+                created: new Date()
+            });
+            var formFill = '';
+            $(document.activeElement).val(formFill);
+          }
+        });
     //Beginning of the summary dashboard of @contexts...3 divs
     //@home, @work, @phone, @computer, etc
     //Another summary of next actions  and waiting fors.... 2 divs
@@ -503,14 +551,5 @@ console.log(x)
     //   //   }).appendTo($(document.activeElement).parent('div').parent('div'));
     //   // return false;
     // };
-
-
-
-
-
-
-
-
-
   });
 }

@@ -46,9 +46,17 @@ label{
 
 #layout {
   padding-left:30px;
-
 }
 
+#import {
+  height:30px;
+  width:160px;
+  float:right;
+}
+#doughnut {
+  width:200px;
+  float:left;
+}
 #importColumn {
   padding-top: 23px;
 }
@@ -56,9 +64,76 @@ label{
 .column {
   width: 400px;
   margin:20px;
-  /*position: relative; */
   display:inline-block;
-  /*position: inherit; */
+  float:right;
+  padding: 40px;
+  box-shadow: 0px 0px 5pt 0pt gray;
+  border-radius: 10px;
+}
+
+.column2 {
+  width: 400px;
+  margin:20px;
+  display:inline-block;
+  float:right;
+  padding: 40px;
+  box-shadow: 0px 0px 5pt 0pt gray;
+  border-radius: 10px;
+}
+#dash {
+  float:right;
+}
+#row {
+  position: fixed;
+  overflow: hidden;
+  left: auto;
+  right: 500;
+  width: auto;
+  margin: 20px;
+  display: inline-block;
+  float: right;
+  padding: 40px;
+  box-shadow: 0px 0px 5pt 0pt gray;
+  border-radius: 10px;
+}
+
+#dash2{
+
+min-width: 470px;
+max-width: 990px;
+min-height: 100px;
+margin-right: 20px;
+margin-left: 20px;
+display: inline-block;
+float: right;
+padding: 5px;
+box-shadow: 0px 0px 5pt 0pt gray;
+border-radius: 10px;
+}
+
+.context{
+  width: 30%;
+  margin: 0px;
+  display: inline-block;
+  float: right;
+  padding: 0px;
+  box-shadow: 0px 0px 5pt 0pt gray;
+  border-radius: 10px;
+}
+
+#nextactions {
+  width: 400px;
+  margin:20px;
+  display:inline-block;
+  float:right;
+  padding: 40px;
+  box-shadow: 0px 0px 5pt 0pt gray;
+  border-radius: 10px;
+}
+#waitingfor {
+  width: 400px;
+  margin:20px;
+  display:inline-block;
   float:right;
   padding: 40px;
   box-shadow: 0px 0px 5pt 0pt gray;
@@ -67,18 +142,6 @@ label{
 
 .listed2 {
   color:gray;
-}
-
-
-#viewing {
-  /*margin: 0px auto;*/
-  width: 400px;
-  /*float:left;
-  padding-top: 0px;*/
-
-}
-#reveal {
-  text-align: right;
 }
 
 li {
@@ -112,16 +175,10 @@ textarea:focus {
 }
 
 #newItems {
-  height: 90px;
+  height: 170px;
+  width:160px;
+  float:right;
   border-bottom-left-radius: 0px;
-}
-
-#output {
-  height: 150px;
-}
-
-#output2 {
-  height: 200px;
 }
 
 input {
@@ -183,10 +240,10 @@ width: 350px;
   color:#CC0066;
 }
 #aof li {
-  color:#339933;
+  color:#31a354;
 }
 #goals li {
-  color:#009999;
+  color:#17becf;
 }
 #calendar li {
   color:#006699;
@@ -194,3 +251,4 @@ width: 350px;
 #vision li {
   color:#660099;
 }
+

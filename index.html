@@ -6,7 +6,6 @@
     <script src="library/jquery.js"></script>
     <script src="library/underscore.js"></script>
     <link rel="stylesheet" href="library/style.css">
-    <script src="library/Chart.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
   </head>
   <body>
@@ -38,7 +37,7 @@
       <div class='column'>
         <div id='doughnut'></div>
           <textarea rows="9" cols="5" id="newItems"></textarea>
-          <button id="import">import</button>
+          <button id="import">import</button><br>
         <em>in</em><br>
         <input type='text' value='' id="search"><br>
         <div id='list'></div>
@@ -74,23 +73,18 @@
       <div id='someday'>someday/maybe</div>
       <div id='done' style="display: none">done</div>
     </div>
+    <div id="row">
+      <div id="dash">
+        <div id="waitingfor">Waiting</div>
+        <div id="nextactions">Next Actions</div>
+        <div id="dash2">
+          <div class="context">@1</div>
+          <div class="context">@2</div>
+          <div class="context">@3</div>
+        </div>
+      </div>
     </div>
-    <input type="radio"
-  name="radData"
-  id="rad1"
-  value="data1"
-  checked="checked"
-  onclick="change(dataset.apples);">
-
-          <label for="rad1">Data1</label>
-
-  <input type="radio"
-  name="radData"
-  id="rad2"
-  value="data2"
-  onclick="change(dataset2.apples2);">
-
-          <label for="rad2">Data2</label>
+    </div>
     <script src="library/script.js"></script>
   </body>
 </html>
