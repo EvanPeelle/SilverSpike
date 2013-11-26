@@ -1,6 +1,6 @@
 //http://www.sefol.com/?p=1090
 
-var client = new Dropbox.Client({key: 'j37v18c5tdi8xu4'});
+var client = new Dropbox.Client({key: 'XXXXXXXXXXXXX'});
 client.authenticate();
   // Client is authenticated. Display UI.
   if (client.isAuthenticated()) {
